@@ -5,6 +5,10 @@ import {
   CSS2DRenderer,
   CSS2DObject,
 } from "three/examples/jsm/renderers/CSS2DRenderer";
+import {
+  CSS3DRenderer,
+  CSS3DObject,
+} from "three/addons/renderers/CSS3DRenderer.js";
 
 var scene = new THREE.Scene();
 var chairFabric;
@@ -43,11 +47,25 @@ p.textContent =
 // // scene.add(cPointLabel);
 // console.log(cPointLabel)
 // cPointLabel.position.set(1, 0, 0);
-const div = document.createElement('div');
+const div = document.createElement("div");
 div.appendChild(p);
 const divContainer = new CSS2DObject(div);
 // scene.add(divContainer);
 
+// 3D Label Renderer
+const labelRenderer3D = new CSS3DRenderer();
+labelRenderer3D.setSize(window.innerWidth, window.innerHeight);
+labelRenderer3D.domElement.style.pointerEvents = "none";
+document.body.appendChild(labelRenderer3D.domElement);
+
+const p1 = document.createElement("p");
+p1.textContent = "FABRIC";
+const div1 = document.createElement("div");
+div1.appendChild(p1);
+const divContainer1 = new CSS3DObject(div1);
+divContainer1.position.set(0, 0, 0);
+console.log(divContainer1);
+scene.add(divContainer1);
 
 gltfloader.load(
   "SheenChair.glb",
@@ -58,8 +76,12 @@ gltfloader.load(
     scene.add(root);
     // chairFabric.add(cPointLabel);
     divContainer.position.copy(chairFabric.position);
+    divContainer.position.set(0, 0.5, 0);
     chairFabric.add(divContainer);
-    
+
+    // div1.position.copy(chairFabric.position);
+    // chairFabric.add(div1);
+    // console.log("3D", div1);
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -77,8 +99,6 @@ controls.dampingFactor = 0.25; // adjusts how quickly the controls slow down aft
 controls.screenSpacePanning = false;
 controls.maxPolarAngle = Math.PI / 2;
 
-
-
 var animate = function () {
   requestAnimationFrame(animate);
 
@@ -92,9 +112,10 @@ var animate = function () {
   // cPointLabel.position.set(chairFabric.position);
   // cPointLabel.position.copy(chairFabric.position);
   // console.log(chairFabric.position+" "+cPointLabel.position);
-  chairFabric.position.x +=0.001;
+  chairFabric.position.x += 0.001;
   controls.update();
   labelRenderer.render(scene, camera);
+  labelRenderer3D.render(scene, camera);
   renderer.render(scene, camera);
 };
 
