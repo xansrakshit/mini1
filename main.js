@@ -39,14 +39,15 @@ document.body.appendChild(labelRenderer.domElement);
 const p = document.createElement("p");
 p.textContent =
   "Chair Fabric: The sun set over the tranquil horizon, casting hues of orange and pink across the sky, painting a serene evening scene.";
-const cPointLabel = new CSS2DObject(p);
-// scene.add(cPointLabel);
-console.log(cPointLabel)
-cPointLabel.position.set(1, 0, 0);
-// const div = document.createElement('div');
-// div.appendChild(p);
-// const divContainer = new CSS2DObject(div);
+// const cPointLabel = new CSS2DObject(p);
+// // scene.add(cPointLabel);
+// console.log(cPointLabel)
+// cPointLabel.position.set(1, 0, 0);
+const div = document.createElement('div');
+div.appendChild(p);
+const divContainer = new CSS2DObject(div);
 // scene.add(divContainer);
+
 
 gltfloader.load(
   "SheenChair.glb",
@@ -55,7 +56,10 @@ gltfloader.load(
     chairFabric = glb.scene.children[0];
     const root = glb.scene;
     scene.add(root);
-    chairFabric.add(cPointLabel);
+    // chairFabric.add(cPointLabel);
+    divContainer.position.copy(chairFabric.position);
+    chairFabric.add(divContainer);
+    
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -78,9 +82,9 @@ controls.maxPolarAngle = Math.PI / 2;
 var animate = function () {
   requestAnimationFrame(animate);
 
-  chairFabric.rotation.x += 0.03;
-  chairFabric.rotation.y += 0.03;
-  chairFabric.rotation.z += 0.03;
+  // chairFabric.rotation.x += 0.03;
+  // chairFabric.rotation.y += 0.03;
+  // chairFabric.rotation.z += 0.03;
   // cPointLabel.rotateX += 0.1;
   // cPointLabel.rotation.x += 0.1;
   // cPointLabel.rotation.y += 0.1;
@@ -88,6 +92,7 @@ var animate = function () {
   // cPointLabel.position.set(chairFabric.position);
   // cPointLabel.position.copy(chairFabric.position);
   // console.log(chairFabric.position+" "+cPointLabel.position);
+  chairFabric.position.x +=0.001;
   controls.update();
   labelRenderer.render(scene, camera);
   renderer.render(scene, camera);
