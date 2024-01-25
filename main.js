@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 var scene = new THREE.Scene();
 var chairFabric;
@@ -48,12 +49,20 @@ controls.dampingFactor = 0.25; // adjusts how quickly the controls slow down aft
 controls.screenSpacePanning = false;
 controls.maxPolarAngle = Math.PI / 2;
 
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.style.position = "absolute";
+labelRenderer.domElement.style.top = "0px";
+labelRenderer.domElement.style.pointerEvents = 'none';
+document.body.appendChild(labelRenderer.domElement);
+
 var animate = function () {
   requestAnimationFrame(animate);
 
   // chairFabric.rotation.x += 0.1;
   // chairFabric.rotation.y += 0.1;
   controls.update();
+  labelRenderer.render(scene, camera);
   renderer.render(scene, camera);
 };
 
